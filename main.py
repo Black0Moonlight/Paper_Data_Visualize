@@ -18,11 +18,12 @@ colors = {
 }
 
 # 读取CSV文件
-file_path = r'F:\桥本研实验数据记录\training_log\Oct21_23-55-05_imitate\csv\train_mean_reward.csv'
+# file_path = r'F:\桥本研实验数据记录\training_log\Oct21_23-55-05_imitate\csv\train_mean_reward.csv'
+file_path = r'C:\Users\24178\Desktop\data.csv'
 df = pd.read_csv(file_path)
 
 curves = {
-    "Object speed: 5 m/s": {"x": df['Step'].tolist(), "y": df['Value'].tolist()},
+    "Model-1, Ball speed: 5 m/s": {"x": df['Step'].tolist(), "y": df['Value'].tolist()},
 }
 
 
@@ -41,10 +42,13 @@ def smooth_curve(data, window_size=50):
 
 for label, datas in curves.items():
     smoothed_values = smooth_curve(datas["y"], window_size=10)
+    devide = 1000
+    end = 1800
+    plt.plot(datas["x"][:devide], datas["y"][:devide], '-', color=colors["E95351"]["hex"], alpha=0.2)
+    plt.plot(datas["x"][:devide], smoothed_values[:devide], '-', color=colors["E95351"]["hex"], label=label)
 
-    plt.plot(datas["x"], datas["y"], '-', color=colors["E95351"]["hex"], alpha=0.2)
-    plt.plot(datas["x"], smoothed_values, '-', color=colors["E95351"]["hex"], label=label)
-
+    plt.plot(datas["x"][devide-1:end], datas["y"][devide-1:end], '-', color=colors["F7A24F"]["hex"], alpha=0.2)
+    plt.plot(datas["x"][devide-1:end], smoothed_values[devide-1:end], '-', color=colors["F7A24F"]["hex"], label="Model-2, Ball speed: 10 m/s")
 
 # 获取当前轴
 ax = plt.gca()
